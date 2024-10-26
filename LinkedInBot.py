@@ -11,6 +11,8 @@ from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 from bs4 import BeautifulSoup
 from random import shuffle
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
 
 
 from os.path import join, dirname
@@ -83,15 +85,14 @@ def StartBrowser(browserChoice):
         browser = webdriver.PhantomJS()
 
     # Sign in
-    browser.get('https://linkedin.com/uas/login')
-    emailElement = browser.find_element_by_id('username')
+    browser.get('https://linkedin.com/login')
+    emailElement = browser.find_element(By.ID,'username')
     emailElement.send_keys(EMAIL)
-    passElement = browser.find_element_by_id('password')
-    passElement.send_keys(PASSWORD)
-    passElement.submit()
+    passElement = browser.find_element(By.ID,'password')
+    passElement.send_keys(PASSWORD, Keys.ENTER)
 
     print('Signing in...')
-    time.sleep(3)
+    time.sleep(10)
 
     soup = BeautifulSoup(browser.page_source, "html.parser")
     if soup.find('div', {'class': 'alert error'}):
@@ -149,7 +150,9 @@ def LinkedInBot(browser):
 
             shuffle(profilesQueued)
             profileID = profilesQueued.pop()
-            browser.get('https://www.linkedin.com'+profileID)
+            #### I commited this line bacause the variable 'profileID' get the full URL, so we do not need truncate
+            #browser.get('https://www.linkedin.com'+profileID)
+            browser.get(profileID)
 
             # Connect with users if the flag is turned on and matches your criteria
             if CONNECT_WITH_USERS:
@@ -244,10 +247,10 @@ def ConnectWithUser(browser):
             if VERBOSE:
                 print('Sending the user an invitation to connect.')
                 # old class = connect primary top-card-action ember-view
-                browser.find_element_by_xpath(
+                browser.find_element(By.XPATH,
                     '//button[@class="pv-s-profile-actions pv-s-profile-actions--connect ml2 artdeco-button artdeco-button--2 artdeco-button--primary ember-view"]').click()
                 time.sleep(random.randrange(3))
-                browser.find_element_by_xpath(
+                browser.find_element(By.XPATH,
                     '//button[@class="ml1 artdeco-button artdeco-button--3 artdeco-button--primary ember-view"]').click()
         except:
             pass

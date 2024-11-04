@@ -26,9 +26,9 @@ load_dotenv(dotenv_path)
 EMAIL = os.getenv("EMAIL", '')
 PASSWORD = os.getenv("PASSWORD", '')
 VIEW_SPECIFIC_USERS = False
-SPECIFIC_USERS_TO_VIEW = ['CEO', 'CTO', 'Developer', 'HR', 'Recruiter']
+SPECIFIC_USERS_TO_VIEW = ['CEO', 'CTO', 'Developer', 'HR', 'Recruiter', 'tech']
 NUM_LAZY_LOAD_ON_MY_NETWORK_PAGE = 5
-CONNECT_WITH_USERS = True
+CONNECT_WITH_USERS = False
 RANDOMIZE_CONNECTING_WITH_USERS = True
 JOBS_TO_CONNECT_WITH = ['CEO', 'CTO', 'Developer', 'HR', 'Recruiter']
 ENDORSE_CONNECTIONS = False
@@ -78,7 +78,9 @@ def StartBrowser(browserChoice):
 
     elif browserChoice == 2:
         print('\nLaunching Firefox/Iceweasel')
-        browser = webdriver.Firefox()
+        optitons = webdriver.FirefoxOptions()
+        optitons.add_argument('--headless')
+        browser = webdriver.Firefox(options=optitons)
 
     elif browserChoice == 3:
         print('\nLaunching PhantomJS')
